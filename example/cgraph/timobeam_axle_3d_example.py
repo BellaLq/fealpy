@@ -4,17 +4,17 @@ import fealpy.cgraph as cgraph
 WORLD_GRAPH = cgraph.WORLD_GRAPH
 
 pde = cgraph.create("TimobeamAxle3d")
-mesher = cgraph.create("EdgeMesh")
+mesher = cgraph.create("CreateMesh")
 spacer = cgraph.create("TensorFunctionSpace")
 isDDof = cgraph.create("BoundaryDof")
 uher = cgraph.create("FEFunction")
-timobeam_axle_eq = cgraph.create("TimobeamAxleEquation")
+timobeam_axle = cgraph.create("TimobeamAxle")
 dbc = cgraph.create("DirichletBC")
 solver = cgraph.create("CGSolver")
 
 # 连接节点
 spacer(mesh=mesher(), p=1)
-timobeam_axle_eq(
+timobeam_axle(
     space=spacer(),
     q=3,
     lam=pde().lam,
@@ -25,8 +25,8 @@ timobeam_axle_eq(
 dbc(
     gd=pde().displacement_bc,
     isDDof=isDDof(space=spacer()),
-    form=timobeam_axle_eq().operator,
-    F=timobeam_axle_eq().external_load
+    form=timobeam_axle().operator,
+    F=timobeam_axle().external_load
 )
 solver(
     A=dbc().A,
