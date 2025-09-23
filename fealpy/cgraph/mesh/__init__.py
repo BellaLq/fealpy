@@ -4,6 +4,7 @@ from .creation_box import *
 from .creation_ellipse import *
 from .creation_torus import *
 from .creation_cylinder import *
+from .creation_lshape import *
 
 from .ops import ErrorEstimation, MeshDimensionUpgrading
 
