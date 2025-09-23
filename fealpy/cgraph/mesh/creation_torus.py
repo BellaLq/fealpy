@@ -1,4 +1,8 @@
-from fealpy.cgraph.nodetype import CNodeType, PortConf, DataType
+
+from ..nodetype import CNodeType, PortConf, DataType
+
+__all__ = ['Torus2d']
+
 
 class Torus2d(CNodeType):
     r"""Generate a mesh for a torus.
@@ -22,20 +26,20 @@ class Torus2d(CNodeType):
     PATH: str = "网格.构造"
     INPUT_SLOTS = [
         PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tri", items=["tri", "quad"]),
-        PortConf("R", DataType.FLOAT, 0, default=1.0, title="长轴"),
-        PortConf("r", DataType.FLOAT, 0, default=0.3, title="短轴"),
-        PortConf("x", DataType.FLOAT, 0, default=0.0, title="中心X坐标"),
-        PortConf("y", DataType.FLOAT, 0, default=0.0, title="中心Y坐标"),
-        PortConf("z", DataType.FLOAT, 0, default=0.0, title="中心Z坐标"),
-        PortConf("h", DataType.FLOAT, 0, default=0.1, title="网格尺寸"),
-        PortConf("ax", DataType.FLOAT, 0, default=0.0, title="x轴向"),
-        PortConf("ay", DataType.FLOAT, 0, default=0.0, title="y轴向"),
-        PortConf("az", DataType.FLOAT, 0, default=1.0, title="z轴向"),
+        PortConf("R", DataType.FLOAT, 1, default=1.0, title="长轴"),
+        PortConf("r", DataType.FLOAT, 1, default=0.3, title="短轴"),
+        PortConf("x", DataType.FLOAT, 1, default=0.0, title="中心X坐标"),
+        PortConf("y", DataType.FLOAT, 1, default=0.0, title="中心Y坐标"),
+        PortConf("z", DataType.FLOAT, 1, default=0.0, title="中心Z坐标"),
+        PortConf("h", DataType.FLOAT, 1, default=0.1, title="网格尺寸"),
+        PortConf("ax", DataType.FLOAT, 1, default=0.0, title="轴向X"),
+        PortConf("ay", DataType.FLOAT, 1, default=0.0, title="轴向Y"),
+        PortConf("az", DataType.FLOAT, 1, default=1.0, title="轴向Z"),
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格"),
     ]
-    
+
     @staticmethod
     def run(mesh_type, R, r, x, y, z, h, ax, ay, az):
         from fealpy.mesher import TorusMesher

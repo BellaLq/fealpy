@@ -8,6 +8,7 @@ from .nodetype import CNodeType, search, create, from_dict, to_dict
 from .registry import *
 
 __nodes__ = [
+    "ops",
     "model",
     "mesh",
     "functionspace",
