@@ -5,7 +5,7 @@ __all__ = ["StationaryNS2d"]
 
 class StationaryNS2d(CNodeType):
     TITLE: str = "Stationary NS 2D"
-    PATH: str = "model.stationary_navier_stokes"
+    PATH: str = "模型.NavierStokes"
     INPUT_SLOTS = [
         PortConf("example", DataType.MENU, 0, title="例子编号", default=1, items=[i for i in range(1, 3)])
     ]

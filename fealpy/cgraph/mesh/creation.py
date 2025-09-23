@@ -1,47 +1,41 @@
-from typing import Type
-import importlib
 
 from ..nodetype import CNodeType, PortConf, DataType
+from .utils import get_mesh_class
+
+__all__ = ["CreateMesh", "DLDMicrofluidicChipMesh2d"]
 
 
-def get_mesh_class(mesh_type: str) -> Type:
-    m = importlib.import_module(f"fealpy.mesh.{mesh_type}_mesh")
-    mesh_class_name = mesh_type[0].upper() + mesh_type[1:] + "Mesh"
-    return getattr(m, mesh_class_name)
-
-
-class Box2d(CNodeType):
-    r"""Create a mesh in a box-shaped 2D area.
+class CreateMesh(CNodeType):
+    r"""Create a mesh object.This node generates a mesh of the specified type 
+    using given node and cell data.
 
     Inputs:
         mesh_type (str): Type of mesh to granerate.
-        domain (tuple[float, float, float, float], optional): Domain.
-        nx (int, optional): Segments on x direction.
-        ny (int, optional): Segments on y direction.
+        Supported values: "triangle", "quadrangle", "tetrahedron", "hexahedron".Default is "edgemesh".
+        node(tensor):Coordinates of mesh nodes.
+        cell(tensor):Connectivity of mesh cells.
 
     Outputs:
         mesh (MeshType): The mesh object created.
     """
-    TITLE: str = "二维 Box 网格"
+    TITLE: str = "构造网格"
     PATH: str = "网格.构造"
     INPUT_SLOTS = [
-        PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="triangle", items=["triangle", "quadrangle"]),
-        PortConf("domain", DataType.NONE, title="区域"),
-        PortConf("nx", DataType.INT, title="X 分段数", default=10, min_val=1),
-        PortConf("ny", DataType.INT, title="Y 分段数", default=10, min_val=1)
+        PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="triangle", 
+                 items=["triangle", "quadrangle", "tetrahedron", "hexahedron", "edge"]),
+        PortConf("node", DataType.TENSOR, 1, title="节点坐标"),
+        PortConf("cell", DataType.TENSOR, 1, title="单元")
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格")
     ]
 
     @staticmethod
-    def run(mesh_type, domain, nx, ny):
+    def run(mesh_type, node, cell):
         MeshClass = get_mesh_class(mesh_type)
-        kwds = {"nx": nx, "ny": ny}
-        if domain is not None:
-            kwds["box"] = domain
-        return MeshClass.from_box(**kwds)
-    
+        kwds = {"node": node, "cell": cell}
+        return MeshClass(**kwds)
+
 
 class DLDMicrofluidicChipMesh2d(CNodeType):
     r"""Create a mesh in a DLD microfluidic chip-shaped 2D area.
@@ -59,6 +53,7 @@ class DLDMicrofluidicChipMesh2d(CNodeType):
         n_stages (int, optional): Number of periods of micropillar arrays.
         stage_length (float, optional): Length of a single period.
         lc (float, optional): Target mesh size.
+
     Outputs:
         mesh (MeshType): The mesh object created.
         radius (float): Radius of the micropillars.
@@ -67,22 +62,21 @@ class DLDMicrofluidicChipMesh2d(CNodeType):
         outlet_boundary (ndarray): Outlet boundary.
         wall_boundary (ndarray): Wall boundary of the channel.
     """
-    
     TITLE: str = "二维 DLD 微流芯片网格"
     PATH: str = "网格.构造"
     INPUT_SLOTS = [
-        PortConf("init_point_x", DataType.FLOAT, 0, default=0.0, title="初始点 X"),
-        PortConf("init_point_y", DataType.FLOAT, 0, default=0.0, title="初始点 Y"),
-        PortConf("chip_height", DataType.FLOAT, 0, default=1.0, title="芯片高度"),
-        PortConf("inlet_length", DataType.FLOAT, 0, default=0.1, title="入口宽度"),
-        PortConf("outlet_length", DataType.FLOAT, 0, default=0.1, title="出口宽度"),
-        PortConf("radius", DataType.FLOAT, 0, default=1 / (3 * 4 * 3), title="微柱半径"),
-        PortConf("n_rows", DataType.INT, 0, default=8, title="行数"),
-        PortConf("n_cols", DataType.INT, 0, default=4, title="列数"),
-        PortConf("tan_angle", DataType.FLOAT, 0, default=1/7, title="偏转角正切值"),
-        PortConf("n_stages", DataType.INT, 0, default=3, title="微柱阵列周期数"),
-        PortConf("stage_length", DataType.FLOAT, 0, default=1.4, title="单周期长度"),
-        PortConf("lc", DataType.FLOAT, 0, default=0.02, title="网格尺寸")
+        PortConf("init_point_x", DataType.FLOAT, 1, default=0.0, title="初始点 X"),
+        PortConf("init_point_y", DataType.FLOAT, 1, default=0.0, title="初始点 Y"),
+        PortConf("chip_height", DataType.FLOAT, 1, default=1.0, title="芯片高度"),
+        PortConf("inlet_length", DataType.FLOAT, 1, default=0.1, title="入口宽度"),
+        PortConf("outlet_length", DataType.FLOAT, 1, default=0.1, title="出口宽度"),
+        PortConf("radius", DataType.FLOAT, 1, default=1 / (3 * 4 * 3), title="微柱半径"),
+        PortConf("n_rows", DataType.INT, 1, default=8, title="行数"),
+        PortConf("n_cols", DataType.INT, 1, default=4, title="列数"),
+        PortConf("tan_angle", DataType.FLOAT, 1, default=1/7, title="偏转角正切值"),
+        PortConf("n_stages", DataType.INT, 1, default=3, title="微柱阵列周期数"),
+        PortConf("stage_length", DataType.FLOAT, 1, default=1.4, title="单周期长度"),
+        PortConf("lc", DataType.FLOAT, 1, default=0.02, title="网格尺寸")
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格"),
@@ -122,33 +116,3 @@ class DLDMicrofluidicChipMesh2d(CNodeType):
 
         return (mesher.mesh, mesher.radius, mesher.centers, mesher.inlet_boundary, 
                 mesher.outlet_boundary, mesher.wall_boundary)
-    
-class Cylinder3d(CNodeType):
-    r"""Create a mesh in a cylinder-shaped 3D area.
-
-    Inputs:
-        radius (float): Radius of the cylinder.
-        height (float): Height of the cylinder.
-        lc (float, optional): Target mesh size.
-    Outputs:
-        mesh (MeshType): The mesh object created.
-    """
-    TITLE: str = "圆柱体网格"
-    PATH: str = "网格.构造"
-    INPUT_SLOTS = [
-        PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tetrahedron", items=["tetrahedron"]),
-        PortConf("radius", DataType.FLOAT, title="圆柱体半径", default=1.0, min_val=1e-6),
-        PortConf("height", DataType.FLOAT, title="圆柱体高度", default=2.0, min_val=1e-6),
-        PortConf("lc", DataType.FLOAT, title="网格尺寸", default=0.2, min_val=1e-6)
-    ]
-    OUTPUT_SLOTS = [
-        PortConf("mesh", DataType.MESH, title="网格"),
-    ]
-
-    @staticmethod
-    def run(mesh_type, radius, height, lc): 
-        import matplotlib.pyplot as plt
-        MeshClass = get_mesh_class(mesh_type)
-        mesh = MeshClass.from_cylinder_gmsh(radius=radius, height=height, lc=lc)
-
-        return mesh

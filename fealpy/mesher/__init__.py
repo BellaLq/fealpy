@@ -8,3 +8,5 @@ from .sphere_shell_mesher import SphereShellMesher
 from .hollowblock_mesher import HollowBlockMesher
 from .interface_mesher import InterfaceFittedMesher2d
 from .dld_microfluidic_chip_mesher import DLDMicrofluidicChipMesher
+from .ellipse_mesher import EllipseMesher
+from .torus_mesher import TorusMesher
