@@ -2,7 +2,6 @@ from typing import Type
 import importlib
 
 from ..nodetype import CNodeType, PortConf, DataType
-from ...mesh import BdfFileParser, NodeSection, ElementSection
 
 
 mesh_type_map = {
@@ -38,6 +37,7 @@ class BdfMeshReader(CNodeType):
 
     @staticmethod
     def run(input_bdf_file):
+        from fealpy.mesh import BdfFileParser, NodeSection, ElementSection
         bdf_parser = BdfFileParser().parse(input_bdf_file)
         node_section = bdf_parser.get_section(NodeSection)
         cell_section = bdf_parser.get_section(ElementSection)
