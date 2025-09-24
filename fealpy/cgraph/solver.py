@@ -20,11 +20,9 @@ class CGSolver(CNodeType):
     @staticmethod
     def run(*args, **kwargs):
         from ..solver import cg
-        print(args, kwargs)
         return cg(*args, **kwargs)
-    
-    
-    
+
+
 from .nodetype import CNodeType, PortConf, DataType
 
 __all__ = ["DirectSolver"]
@@ -36,16 +34,14 @@ class DirectSolver(CNodeType):
     INPUT_SLOTS = [
         PortConf("A", DataType.LINOPS, title="矩阵"),
         PortConf("b", DataType.TENSOR, title="向量"),
-        PortConf("matrix_type", DataType.STRING, title="矩阵类型",
-                 default="G"),
-        PortConf("solver", DataType.STRING, title="求解器",
-                 default="scipy") ]
-
+        PortConf("matrix_type", DataType.MENU, title="矩阵类型",
+                 default="G", items=["U", "L", "S", "SP", "G"]),
+        PortConf("solver", DataType.MENU, title="求解器",
+                 default="scipy", items=["scipy", "mumps", "pardiso", "cupy"])
+    ]
     OUTPUT_SLOTS = [
         PortConf("out", DataType.TENSOR, title="结果")
     ]
-
-
 
     @staticmethod
     def run(*args, **kwargs):
