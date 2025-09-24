@@ -11,6 +11,8 @@ class VPDecoupling(CNodeType):
     ]
     OUTPUT_SLOTS = [
         PortConf("uh", DataType.TENSOR, title="速度数值解"),
+        PortConf("u_x", DataType.TENSOR, title="速度x分量数值解"),
+        PortConf("u_y", DataType.TENSOR, title="速度y分量数值解"),
         PortConf("ph", DataType.TENSOR, title="压力数值解")
     ]
 
@@ -18,6 +20,8 @@ class VPDecoupling(CNodeType):
     def run(out, uspace):
         ugdof = uspace.number_of_global_dofs()
         uh = out[:ugdof]
+        u_x = out[:int(ugdof/2)]
+        u_y = out[int(ugdof/2):ugdof]
         ph = out[ugdof:]
 
-        return uh ,ph
+        return uh, u_x, u_y, ph
