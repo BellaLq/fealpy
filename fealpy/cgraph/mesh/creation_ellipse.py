@@ -29,10 +29,10 @@ class CircleMesh(CNodeType):
     INPUT_SLOTS = [
         PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="triangle", items=["triangle"]),
         PortConf("domain", DataType.NONE, title="区域"),
-        PortConf("X", DataType.FLOAT, title="圆心X坐标"),
-        PortConf("Y", DataType.FLOAT, title="圆心Y坐标"),
-        PortConf("radius", DataType.FLOAT, title="圆半径"),
-        PortConf("h", DataType.FLOAT, title="网格密度")
+        PortConf("X", DataType.FLOAT, title="圆心X坐标", default=1.0),
+        PortConf("Y", DataType.FLOAT, title="圆心Y坐标", default=1.0),
+        PortConf("radius", DataType.FLOAT, title="圆半径", default=1.0),
+        PortConf("h", DataType.FLOAT, title="网格密度", default=0.5)
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格")
