@@ -7,7 +7,7 @@ class DLDMicrofluidicChip2D(CNodeType):
     PATH: str = "模型.DLD 微流控芯片"
     INPUT_SLOTS = [
         PortConf("radius", DataType.FLOAT, title="微柱半径"),
-        PortConf("centers", DataType.TENSOR, title="微柱中心坐标数组"),
+        PortConf("centers", DataType.TENSOR, title="微柱圆心坐标"),
         PortConf("inlet_boundary", DataType.TENSOR, title="入口边界"),
         PortConf("outlet_boundary", DataType.TENSOR, title="出口边界"),
         PortConf("wall_boundary", DataType.TENSOR, title="通道壁面边界")
