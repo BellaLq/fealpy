@@ -5,7 +5,7 @@ import numpy as np
 import importlib
 import matplotlib.pyplot as plt
 
-from fealpy.cgraph.mesh import CreateMesh, Box3d, CircleMesh
+from fealpy.cgraph.mesh import CreateMesh, Box3d, CircleMesh, Lshape2d
 
 
 def get_mesh_class(mesh_type: str) -> Type:
@@ -109,16 +109,34 @@ class TestMesh:
         
         if mesh_type == "triangle":
             plot_2d(mesh)
+    
+    @pytest.mark.parametrize("mesh_type", ["triangle", "quadrangle"])
+    def test_lshape2d(self, mesh_type):
+        big_box = (-1.0, 1.0, -1.0, 1.0)
+        small_box = (0.0, 1.0, 0.0, 1.0)
+        nx, ny = 2, 2
+
+        MeshClass = get_mesh_class(mesh_type)
+        mesh = Lshape2d.run(mesh_type, big_box, small_box, nx, ny)
+
+        assert isinstance(mesh, MeshClass)
+        assert hasattr(mesh, "node")
+        assert hasattr(mesh, "cell")
         
+        if mesh_type in ["triangle", "quadrangle"]:
+            plot_2d(mesh)
 
 if __name__ == "__main__":
     a = TestMesh()
-    a.test_create_mesh('triangle')
-    a.test_create_mesh('quadrangle')
-    a.test_create_mesh('tetrahedron')
-    a.test_create_mesh('hexahedron')
-    a.test_create_mesh('edge')
-    a.test_box3d('tetrahedron')
-    a.test_box3d('hexahedron')
-    a.test_circle('triangle')
-    # pytest.main(["test/cgraph/test_mesh.py"])
+    # a.test_create_mesh('triangle')
+    # a.test_create_mesh('quadrangle')
+    # a.test_create_mesh('tetrahedron')
+    # a.test_create_mesh('hexahedron')
+    # a.test_create_mesh('edge')
+    # a.test_box3d('tetrahedron')
+    # a.test_box3d('hexahedron')
+    # a.test_circle('triangle')
+    # a.test_lshape2d('triangle')
+    # a.test_lshape2d('quadrangle')
+    pytest.main(["test/cgraph/test_mesh.py"])
+    # pytest.main(["test/cgraph/test_mesh.py", "-k", "test_lshape2d"])
