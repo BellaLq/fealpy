@@ -20,7 +20,7 @@ class PoissonEquationDBC(CNodeType):
 
     @staticmethod
     def run(space, q, diffusion, source, gd):
-        from ...fem import (
+        from fealpy.fem import (
             LinearForm,
             BilinearForm,
             ScalarDiffusionIntegrator,
@@ -35,10 +35,9 @@ class PoissonEquationDBC(CNodeType):
         SI = ScalarSourceIntegrator(source, q=q)
         lform.add_integrator(SI)
         F = lform.assembly()
-        
-        from ..fem import DirichletBC
+
+        from fealpy.fem import DirichletBC
         BC = DirichletBC(space, gd=gd)
         A,F = BC.apply(A, F)
-
 
         return A, F
