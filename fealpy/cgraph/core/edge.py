@@ -53,6 +53,7 @@ def connect_from_address(
             for addr in addrs:
                 if not isinstance(addr, AddrHandler):
                     in_slot.default = addr
+                    in_slot.has_default = True
                 else:
                     source_node, source_slot = addr.get_addr()
                     in_slot.connect(source_node, source_slot)
