@@ -89,6 +89,89 @@ class Ellipse2d(CNodeType):
         kwds = {"a": a, "b": b, "x": x, "y": y, "h": h, "theta": theta}
         return MeshClass.init_mesh(**kwds)
 
+    class EllipsoidSurface(CNodeType):
+        r"""Generate a mesh for an ellipsoid surface.
+
+        Inputs:
+            mesh_type (str): Type of mesh to granerate.
+            x (float): the coordinate of the center in x direction.
+            y (float): the coordinate of the center in y direction.
+            z (float): the coordinate of the center in z direction.
+            rx (float): the radii of the ellipsoid along the x axes.
+            ry (float): the radii of the ellipsoid along the y axes.
+            rz (float): the radii of the ellipsoid along the z axes.
+            h (float): mesh size.
+
+        Outputs:
+            mesh (MeshType): The mesh object created.
+        """
+        TITLE: str = "椭球面网格"
+        PATH: str = "网格.构造"
+        INPUT_SLOTS = [
+            PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tri", items=["tri", "quad"]),
+            PortConf("x", DataType.FLOAT, 1, default=0.0, title="椭球中心的 x 坐标"),
+            PortConf("y", DataType.FLOAT, 1, default=0.0, title="椭球中心的 y 坐标"),
+            PortConf("z", DataType.FLOAT, 1, default=0.0, title="椭球中心的 z 坐标"),
+            PortConf("rx", DataType.FLOAT, 1, default=2.0, title="椭球 x 方向主轴长度"),
+            PortConf("ry", DataType.FLOAT, 1, default=1.0, title="椭球 y 方向主轴长度"),
+            PortConf("rz", DataType.FLOAT, 1, default=0.5, title="椭球 z 方向主轴长度"),
+            PortConf("h", DataType.FLOAT, 1, default=0.1, title="网格尺寸"),
+        ]
+        OUTPUT_SLOTS = [
+            PortConf("mesh", DataType.MESH, title="网格"),
+        ]
+
+        @staticmethod
+        def run(mesh_type, x, y, z, rx, ry, rz, h):
+            from fealpy.mesher import EllipsoidMesher
+            ellipsoid_mesher = EllipsoidMesher((x, y, z), (rx, ry, rz))
+            if mesh_type == "tri":
+                ellipsoid_mesher.init_mesh.set('surface_tri')
+            elif mesh_type == "quad":
+                ellipsoid_mesher.init_mesh.set('surface_quad')
+            else:
+                raise ValueError(f"Unsupported mesh type: {mesh_type}")
+            mesh = ellipsoid_mesher.init_mesh(h)
+            return mesh
+
+    class EllipsoidVolume(CNodeType):
+        r"""Generate a mesh for an ellipsoid volume.
+
+        Inputs:
+            x (float): the coordinate of the center in x direction.
+            y (float): the coordinate of the center in y direction.
+            z (float): the coordinate of the center in z direction.
+            rx (float): the radii of the ellipsoid along the x axes.
+            ry (float): the radii of the ellipsoid along the y axes.
+            rz (float): the radii of the ellipsoid along the z axes.
+            h (float): mesh size.
+
+        Outputs:
+            mesh (MeshType): The mesh object created.
+        """
+        TITLE: str = "椭球体网格"
+        PATH: str = "网格.构造"
+        INPUT_SLOTS = [
+            PortConf("x", DataType.FLOAT, 1, default=0.0, title="椭球中心的 x 坐标"),
+            PortConf("y", DataType.FLOAT, 1, default=0.0, title="椭球中心的 y 坐标"),
+            PortConf("z", DataType.FLOAT, 1, default=0.0, title="椭球中心的 z 坐标"),
+            PortConf("rx", DataType.FLOAT, 1, default=2.0, title="椭球 x 方向主轴长度"),
+            PortConf("ry", DataType.FLOAT, 1, default=1.0, title="椭球 y 方向主轴长度"),
+            PortConf("rz", DataType.FLOAT, 1, default=0.5, title="椭球 z 方向主轴长度"),
+            PortConf("h", DataType.FLOAT, 1, default=0.1, title="网格尺寸"),
+        ]
+        OUTPUT_SLOTS = [
+            PortConf("mesh", DataType.MESH, title="网格"),
+        ]
+
+        @staticmethod
+        def run(x, y, z, rx, ry, rz, h):
+            from fealpy.mesher import EllipsoidMesher
+            ellipsoid_mesher = EllipsoidMesher((x, y, z), (rx, ry, rz))
+            ellipsoid_mesher.init_mesh.set('volume')
+            mesh = ellipsoid_mesher.init_mesh(h)
+            return mesh
+
 
 class SphereSurface(CNodeType):
     r"""Create a mesh on the surface of a unit sphere.

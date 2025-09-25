@@ -10,3 +10,4 @@ from .interface_mesher import InterfaceFittedMesher2d
 from .dld_microfluidic_chip_mesher import DLDMicrofluidicChipMesher
 from .ellipse_mesher import EllipseMesher
 from .torus_mesher import TorusMesher
+from .ellipsoid_mesher import EllipsoidMesher
