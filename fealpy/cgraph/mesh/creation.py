@@ -67,7 +67,7 @@ class DLDMicrofluidicChipMesh2d(CNodeType):
     INPUT_SLOTS = [
         PortConf("init_point_x", DataType.FLOAT, 1, default=0.0, title="初始点 X"),
         PortConf("init_point_y", DataType.FLOAT, 1, default=0.0, title="初始点 Y"),
-        PortConf("chip_height", DataType.FLOAT, 1, default=1.0, title="芯片高度"),
+        PortConf("chip_height", DataType.FLOAT, 1, default=1.0, title="芯片长度"),
         PortConf("inlet_length", DataType.FLOAT, 1, default=0.1, title="入口宽度"),
         PortConf("outlet_length", DataType.FLOAT, 1, default=0.1, title="出口宽度"),
         PortConf("radius", DataType.FLOAT, 1, default=1 / (3 * 4 * 3), title="微柱半径"),
