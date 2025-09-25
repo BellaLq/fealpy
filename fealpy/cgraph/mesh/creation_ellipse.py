@@ -28,11 +28,10 @@ class CircleMesh(CNodeType):
     PATH: str = "网格.构造"
     INPUT_SLOTS = [
         PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="triangle", items=["triangle"]),
-        PortConf("domain", DataType.NONE, title="区域"),
-        PortConf("X", DataType.FLOAT, title="圆心X坐标", default=1.0),
-        PortConf("Y", DataType.FLOAT, title="圆心Y坐标", default=1.0),
-        PortConf("radius", DataType.FLOAT, title="圆半径", default=1.0),
-        PortConf("h", DataType.FLOAT, title="网格密度", default=0.5)
+        PortConf("X", DataType.FLOAT, title="圆心X坐标", default=0.0),
+        PortConf("Y", DataType.FLOAT, title="圆心Y坐标", default=0.0),
+        PortConf("radius", DataType.FLOAT, title="半径", default=1.0),
+        PortConf("h", DataType.FLOAT, title="网格尺寸", default=0.5)
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格")
@@ -216,7 +215,7 @@ class Sphere(CNodeType):
     DESC: str = "生成单位球体的网格，输入网格类型和网格密度h。h一般为大于0小于1的浮点数，h越小，网格越密。"
     INPUT_SLOTS = [
         PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tetrahedron", items=["tetrahedron"]),
-        PortConf("h", DataType.FLOAT, 1, title="密度", default=0.5, min_val=0.1),
+        PortConf("h", DataType.FLOAT, 1, title="网格尺寸", default=0.5, min_val=0.1),
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格")
@@ -242,7 +241,7 @@ class SphericalShell3d(CNodeType):
     INPUT_SLOTS = [
         PortConf("r1", DataType.FLOAT, title="内半径", default=0.05, min_val=0.0),
         PortConf("r2", DataType.FLOAT, title="外半径", default=0.5, min_val=0.0),
-        PortConf("h", DataType.FLOAT, title="网格尺度", default=0.04, min_val=1e-6),
+        PortConf("h", DataType.FLOAT, title="网格尺寸", default=0.04, min_val=1e-6),
     ]
     OUTPUT_SLOTS = [
         PortConf("mesh", DataType.MESH, title="网格")
