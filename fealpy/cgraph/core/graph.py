@@ -4,6 +4,7 @@ from typing import Any
 from collections import deque, OrderedDict
 from collections.abc import Callable, Mapping, Iterable
 import threading
+import traceback
 
 from . import edge as _E
 from ._types import CNode, NodeExceptionData, Slot, TransSlot, InputSlot, NodeIOError
@@ -236,6 +237,7 @@ class Graph:
                 timestamp=time.time(),
                 errtype=type(error),
                 message=str(error),
+                traceback=traceback.format_exc(),
                 positional_inputs=args,
                 keyword_inputs=kwargs
             )
