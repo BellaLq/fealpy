@@ -29,10 +29,11 @@ dld_eq(uspace = uspacer(),
 solver(A = dld_eq().bform,
        b = dld_eq().lform)
 postprocess(out = solver().out, 
-            uspace = uspacer())
+            uspace = uspacer(),
+            mesh = mesher())
 
 # 最终连接到图输出节点上
-WORLD_GRAPH.output(uh = postprocess().uh, ph = postprocess().ph)
+WORLD_GRAPH.output(u_x = postprocess().u_x, ph = postprocess().ph)
 WORLD_GRAPH.error_listeners.append(print)
 WORLD_GRAPH.execute()
 print(WORLD_GRAPH.get())
