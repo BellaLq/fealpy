@@ -7,7 +7,8 @@ class VPDecoupling(CNodeType):
     PATH: str = "后处理.解耦"
     INPUT_SLOTS = [
         PortConf("out", DataType.TENSOR, title="结果"),
-        PortConf("uspace", DataType.SPACE, title="速度函数空间")
+        PortConf("uspace", DataType.SPACE, title="速度函数空间"),
+        PortConf("mesh", DataType.MESH, title="网格")
     ]
     OUTPUT_SLOTS = [
         PortConf("uh", DataType.TENSOR, title="速度数值解"),
@@ -17,11 +18,14 @@ class VPDecoupling(CNodeType):
     ]
 
     @staticmethod
-    def run(out, uspace):
+    def run(out, uspace, mesh):
         ugdof = uspace.number_of_global_dofs()
+        NN = mesh.number_of_nodes()
         uh = out[:ugdof]
         u_x = out[:int(ugdof/2)]
+        u_x = u_x[:NN]
         u_y = out[int(ugdof/2):ugdof]
+        u_y = u_y[:NN]
         ph = out[ugdof:]
 
         return uh, u_x, u_y, ph
