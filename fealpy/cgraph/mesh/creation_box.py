@@ -98,7 +98,7 @@ class SquareHole(CNodeType):
     INPUT_SLOTS = [
         PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="triangle", items=["triangle"]),
         PortConf("domain", DataType.NONE, title="区域"),
-        PortConf("X", DataType.NONE, title="空腔X坐标", default=0.5),
+        PortConf("X", DataType.FLOAT, title="空腔X坐标", default=0.5),
         PortConf("Y", DataType.FLOAT, title="空腔Y坐标", default=0.5),
         PortConf("r", DataType.FLOAT, title="空腔半径", default=0.2),
         PortConf("h", DataType.INT, title="网格尺寸", default=0.5)
@@ -138,7 +138,7 @@ class CubeSphericalHole(CNodeType):
     INPUT_SLOTS = [
     PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tetrahedron", items=["tetrahedron"]),
     PortConf("domain", DataType.NONE, title="区域"),
-    PortConf("X", DataType.NONE, title="空腔X坐标", default=0.0),
+    PortConf("X", DataType.FLOAT, title="空腔X坐标", default=0.0),
     PortConf("Y", DataType.FLOAT, title="空腔Y坐标", default=0.0),
     PortConf("Z", DataType.FLOAT, title="空腔Z坐标", default=0.0),
     PortConf("r", DataType.FLOAT, title="空腔半径", default=0.5),
@@ -183,7 +183,7 @@ class BoxMinusCylinder(CNodeType):
     INPUT_SLOTS = [
     PortConf("mesh_type", DataType.MENU, 0, title="网格类型", default="tetrahedron", items=["tetrahedron"]),
     PortConf("domain", DataType.NONE, title="区域"),
-    PortConf("X", DataType.NONE, title="圆柱X坐标", default=0.5),
+    PortConf("X", DataType.FLOAT, title="圆柱X坐标", default=0.5),
     PortConf("Y", DataType.FLOAT, title="圆柱Y坐标", default=0.5),
     PortConf("Z", DataType.FLOAT, title="圆柱Z坐标", default=0.5),
     PortConf("ax", DataType.FLOAT, title="圆柱X轴向", default=1.0),
