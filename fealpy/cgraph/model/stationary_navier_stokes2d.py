@@ -4,8 +4,8 @@ from ..nodetype import CNodeType, PortConf, DataType
 __all__ = ["StationaryNS2d"]
 
 class StationaryNS2d(CNodeType):
-    TITLE: str = "Stationary NS 2D"
-    PATH: str = "模型.NavierStokes"
+    TITLE: str = "二维稳态 NS 方程问题模型"
+    PATH: str = "模型.稳态NS"
     INPUT_SLOTS = [
         PortConf("example", DataType.MENU, 0, title="例子编号", default=1, items=[i for i in range(1, 3)])
     ]
