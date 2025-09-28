@@ -9,4 +9,5 @@ from .creation_lshape import *
 from .ops import ErrorEstimation, MeshDimensionUpgrading
 
 from .bdf_mesh_reader import BdfMeshReader
+from .inp_mesh_reader import InpMeshReader
 from .boundary_mesh_extractor import BoundaryMeshExtractor
