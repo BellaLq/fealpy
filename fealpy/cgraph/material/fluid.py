@@ -18,7 +18,7 @@ class MultiphaseFlowMaterial(CNodeType):
         PortConf("epsilon", DataType.FLOAT, 0, title="界面厚度参数", default=0.01)
     ]
     OUTPUT_SLOTS = [
-        PortConf("material", DataType.LIST, title="物理属性")
+        PortConf("material", DataType.DICT, title="物理属性")
     ]
     @staticmethod
     def run(rho0, rho1, mu0, mu1, lam, gamma, Re, Fr, epsilon):
@@ -30,32 +30,22 @@ class MultiphaseFlowMaterial(CNodeType):
             result[:] = (rho0 - rho1)/2 * phi[:]
             result[:] += (rho0 + rho1)/2 
             return result
-        
-        def mu(phi):
-            tag0 = phi[:] >1
-            tag1 = phi[:] < -1
-            phi[tag0] = 1
-            phi[tag1] = -1
-            mu = phi.space.function()
-            mu[:] = 0.5 * (mu0 + mu1) + 0.5 * (mu0 - mu1) * phi
-            return mu
 
         Pe = 1/epsilon
 
-        material = [{
+        material = {
             'rho0': rho0,
             'rho1': rho1,
             'rho': rho, 
             'mu0': mu0,
             'mu1': mu1,
-            'mu': mu,
             'lam': lam, 
             'gamma': gamma,
             'Re': Re, 
             'Fr': Fr, 
             'epsilon': epsilon,
             'Pe': Pe
-            }]
+            }
 
         return material
     
